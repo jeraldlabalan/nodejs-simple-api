@@ -1,6 +1,9 @@
 import { StatusCodes } from "http-status-codes";
+import pino from 'pino';
 
 import userService from "../service/user.service";
+
+const logger = pino();
 
 const STATUS = {
   success: 'OK',
@@ -41,6 +44,8 @@ const getUser = (req, res) => {
 const addUser = (req, res) => {
     const { body: user } = req;
     const addedUser = userService.addUser(user);
+
+    logger.info('Creating a user...');
 
     return res.status(StatusCodes.CREATED).send({
         status: STATUS.success,
