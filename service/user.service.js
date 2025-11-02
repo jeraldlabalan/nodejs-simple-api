@@ -2,7 +2,11 @@ import userDao from '../model/persistence/user.dao';
 
 
 const getUser = (uid) => {
-    userDao.get(uid);
+    return userDao.get(uid);
+};
+
+const getAllUsers = () => {
+    return userDao.getAllUsers();
 };
 
 const updateUser = (uid, details) => {
@@ -14,11 +18,12 @@ const addUser = (details) => {
 };
 
 const removeUser = (uid) => {
-    userDao.remove(uid);
+    return userDao.remove(uid);
 };
 
 export default {
     getUser,
+    getAllUsers,
     updateUser,
     addUser,
     removeUser

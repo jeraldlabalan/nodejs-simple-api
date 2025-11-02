@@ -1,12 +1,15 @@
 import express from 'express';
-import appRoutes from './route'
+
+import userRoutes from './route/user.routes';
+import mainRoutes from './route/main.routes';
 
 const app = express(); // first endpoint
 const port = 3000;
 
 app.use(express.json()); // pass everything api receives in json format
 
-app.use('/v1', appRoutes)
+app.use('/v1', mainRoutes);
+app.use('/v1/user', userRoutes);
 
 const STATUS = {
   SUCCESS: 'OK',

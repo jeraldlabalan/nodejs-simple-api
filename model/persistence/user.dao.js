@@ -1,46 +1,46 @@
 import users from '../data/user.data';
 
-const get = (uid) => { 
-    const findUser = users.find((user) => {
-        return user.id === uid;
-    });
+const get = (uid) => users.find((user) => (user.id === uid));
 
-    return findUser;
-};
+const getAllUsers = () => users;
 
-const getAllUsers = () => {
-    return users;
-}
+const update = (userId, newDetails) => { 
+    let existingUser = null;
+    let userIndex;
 
-const update = (newDetails) => { 
-    let updated = false;
-    users.forEach((user, index) => {
-        if (user.id === newDetails.id) {
-            users[index] = { ...user, ...newDetails };
-            updated = true;
+    users.map((user, index) => {
+        if (user.id === userId) {
+            existingUser = user;
+            userIndex = index
         }
     });
-    return updated;
+
+    if (!existingUser) return false;
+
+    const updatedDetails = {
+        ...existingUser, 
+        ...newDetails
+    };
+
+    users.splice(userIndex, 1, updatedDetails);
+
+    return updatedDetails;
 };
 
-
 const insert = (details) => { 
-    const newUser = { ...details, id: users.length+1 }
+    const newUser = {id: users.length + 1, ...details}
     users.push(newUser);
 
-    return true;
+    return newUser;
 };
 
 const remove = (uid) => { 
     const deleteUser = (user, index) => {
-        if (user.id === uid) {
-            users.splice(index, 1); // remove the element of the found user in the array
-            return true;
+        if (user?.id === uid) {
+            users.splice(index, 1);
         }
-        return false;
-    }
-
-    const doesUserExist = users.find(deleteUser);
+    };
+    return users.find(deleteUser);
 };
 
 
