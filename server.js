@@ -1,14 +1,26 @@
 import express from 'express';
 import helmet from 'helmet';
+import { rateLimit } from 'express-rate-limit'
 
 import userRoutes from './route/user.routes';
 import mainRoutes from './route/main.routes';
+import compression from 'compression';
 
 const app = express(); // first endpoint
 const port = 3000;
 
+const limiter = rateLimit({
+	windowMs: 60 * 1000, // 1 minute
+	limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	ipv6Subnet: 56, // Set to 60 or 64 to be less aggressive, or 52 or 48 to be more aggressive
+});
+
+app.use(compression());
+app.use(limiter); // Apply the rate limiting middleware to all requests.
 app.use(helmet());
-app.use(express.json()); // pass everything api receives in json format
+app.use(express.json()); // Pass everything api receives in json format
 
 // routes
 app.use('/v1', mainRoutes);
